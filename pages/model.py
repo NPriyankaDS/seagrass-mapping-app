@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'src'))
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model_utils'))
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,10 +12,14 @@ def main():
     
     st.title("Mapping seagrass with Satellite Imagery and Deep Learning")
     st.write("Choose an image to classify")
-    
+    chosen_region = st.sidebar.selectbox("Choose the region",['','Greece','Croatia'])
     # Choose an image file in the sidebar
     image_file = st.sidebar.file_uploader("Choose an image file", type=["tif"])
-    
+    if chosen_region == "Greece":
+        model = model_load('./unet_cleaned_summer_V1.h5')
+    elif chosen_region == "Croatia":
+        model = model_load('./unet_wcc_summer_croatia.h5')
+        
     if image_file is not None:
         # Display the chosen image
         image = load_image(image_file)
